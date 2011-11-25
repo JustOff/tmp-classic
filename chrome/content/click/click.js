@@ -780,6 +780,7 @@ function TMP_hidePopup() {
 
 // for all tabs popup lists
 var TabmixAllTabs = {
+  _selectedItem: null,
   backupLabel: "",
   handleEvent: function TMP_AT_handleEvent(aEvent) {
     switch (aEvent.type) {
@@ -933,19 +934,21 @@ var TabmixAllTabs = {
           this.createMenuItems(popup, tabs[i].Tab, tabs[i].Index, aType);
         break;
       case 2:
-        var rtl = Tabmix.rtl && TabmixSvc.prefs.getIntPref("extensions.tabmix.tabBarMode") != 2;
         tabs = gBrowser.tabs;
-        var index = 0;
-        for (i = 0; i < tabs.length; i++) {
-          let tab = tabs[i];
-          if (tab._TMP_removeing)
+        let addToMenu = side != "right";
+        for (let t = 0; t < tabs.length; t++) {
+          let tab = tabs[t];
+          let visible = side && gBrowser.tabContainer.isTabVisible(tab._tPos);
+          if (visible) {
+            if (tab.pinned)
+              continue;
+            else if (side == "left")
+              break;
+            addToMenu = true;
             continue;
-          if (side && side == (rtl ? "right" : "left") && !tab.collapsed)
-            continue;
-          else if (side && side == (rtl ? "left" : "right") &&
-                (tab.collapsed || tab.hasAttribute("pinned") || gBrowser.tabContainer.isTabVisible(tab._tPos)))
-            continue;
-          this.createMenuItems(popup, tabs[i], index++, aType);
+          }
+          if (addToMenu)
+            this.createMenuItems(popup, tab, t, aType);
         }
         break;
       case 3:
@@ -954,6 +957,18 @@ var TabmixAllTabs = {
           this.createMenuItems(popup, tab, i, aType);
         }
         break;
+    }
+
+    if (this._selectedItem) {
+      let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
+      if (!popup.style.getPropertyValue("max-height")) {
+        popup.style.setProperty("max-height",Math.round(screen.availHeight * 0.7) + "px", "important");
+        scrollBox.ensureElementIsVisible(popup.firstChild);
+      }
+      let items = Array.slice(popup.childNodes);
+      let element = items.indexOf(this._selectedItem) < popup.childElementCount/2 ? popup.firstChild : popup.lastChild;
+      scrollBox.ensureElementIsVisible(element);
+      scrollBox.ensureElementIsVisible(this._selectedItem);
     }
   },
 
@@ -969,6 +984,8 @@ var TabmixAllTabs = {
       mi.setAttribute("count", count);
     }
     this._setMenuitemAttributes(mi, tab);
+    if (tab.selected)
+      this._selectedItem = mi;
 
     mi.value = value;
     tab.mCorrespondingMenuitem = mi;
@@ -1087,6 +1104,7 @@ var TabmixAllTabs = {
     popup.removeEventListener("DOMMouseScroll", this, true);
 
     this.backupLabel = "";
+    this._selectedItem = null;
   },
 
   updateMenuItemActive: function TMP_updateMenuItemActive(event, tab) {
