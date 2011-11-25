@@ -9,6 +9,12 @@
  *
  */
 var TMP_extensionsCompatibility = {
+  preInit: function TMP_EC_preInit() {
+    if ("TreeStyleTabWindowHelper" in window) {
+      TMP_TreeStyleTab.preInit();
+    }
+  },
+
   onContentLoaded: function TMP_EC_onContentLoaded() {
     Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false};
     try {
@@ -427,6 +433,24 @@ var TMP_TreeStyleTab = {
     return false;
   },
 
+  preInit: function () {
+    if (typeof TreeStyleTabWindowHelper.overrideExtensionsPreInit == "function") {
+      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsPreInit",
+          TreeStyleTabWindowHelper.overrideExtensionsPreInit)._replace(
+        // fix typo in TST
+        'SessionData.tabTSTProperties',
+        'sessionData.tabTSTProperties'
+      )._replace(
+        // TST look for DEPRECATED gBrowser.restoreTab in tablib.init
+        'source[1].replace',
+        '" ".replace'
+      )._replace(
+        'eval("tablib.init',
+        'if (false) $&'
+      ).toCode();
+    }
+  },
+
   onContentLoaded: function () {
     if (!this.isNewVersion) {
       if ("overrideExtensionsOnInitAfter" in TreeStyleTabService) {
@@ -500,15 +524,28 @@ var TMP_TreeStyleTab = {
 
     // we don't need this in the new version since we change the tabs-frame place
     // keep it here for non default theme that uses old Tabmix binding
-    if (Tabmix.isVersion(40) && "TreeStyleTabBrowser" in window) {
-      Tabmix.newCode("TreeStyleTabBrowser.prototype.initTabbar", TreeStyleTabBrowser.prototype.initTabbar)._replace(
-        'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
-        'let newTabButton = document.getElementById("new-tab-button"); \
-         if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
-           newTabBox = newTabButton;'
-      )._replace(
-        'newTabBox.orient',
-        'if (newTabBox) $&', {flags: "g"}
+    if ("TreeStyleTabBrowser" in window) {
+      let fn = TreeStyleTabBrowser.prototype.initTabbar;
+      if (fn.toString().indexOf("d = this.document") == -1) {
+        Tabmix.newCode("TreeStyleTabBrowser.prototype.initTabbar", TreeStyleTabBrowser.prototype.initTabbar)._replace(
+          'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
+          'let newTabButton = document.getElementById("new-tab-button"); \
+           if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
+             newTabBox = newTabButton;'
+        )._replace(
+          'newTabBox.orient',
+          'if (newTabBox) $&', {flags: "g"}
+        ).toCode();
+      }
+    }
+
+    // we removed TMP_openTabNext function 2011-11-15
+    if (!("TMP_openTabNext" in gBrowser) &&
+        "TreeStyleTabWindowHelper" in window && TreeStyleTabWindowHelper.overrideExtensionsDelayed) {
+      Tabmix.newCode("TreeStyleTabWindowHelper.overrideExtensionsDelayed",
+          TreeStyleTabWindowHelper.overrideExtensionsDelayed)._replace(
+        'eval("gBrowser.TMP_openTabNext',
+        'if (false) $&'
       ).toCode();
     }
   },
@@ -585,8 +622,8 @@ var TMP_TreeStyleTab = {
 
       Tabmix.newCode("TMP_eventListener.onTabOpen", TMP_eventListener.onTabOpen)._replace(
         /(\})(\)?)$/,
-        'gBrowser.treeStyleTab.initTabAttributes(aTab); \
-         gBrowser.treeStyleTab.initTabContentsOrder(aTab); \
+        'gBrowser.treeStyleTab.initTabAttributes(tab); \
+         gBrowser.treeStyleTab.initTabContentsOrder(tab); \
          $1$2'
       ).toCode();
     }

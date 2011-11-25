@@ -259,7 +259,7 @@ function TMP_beforeStartup(tabBrowser, aTabContainer) {
              return true;
           return (!aBrowser.sessionHistory || aBrowser.sessionHistory.index < 0 ||
                   (aBrowser.sessionHistory.count < 2 &&
-                  (!aBrowser.currentURI || 
+                  (!aBrowser.currentURI ||
                   (aboutBlank ? aBrowser.currentURI.spec == "about:blank" : tabmix_isNewTabUrls(aBrowser.currentURI.spec))
           )));
        } catch (ex) {Tabmix.assert(ex); return true;}
@@ -317,4 +317,7 @@ function TMP_beforeStartup(tabBrowser, aTabContainer) {
     // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
     if ("SwitchThemesModule" in window && SwitchThemesModule.windowsStates && SwitchThemesModule.windowsStates.length)
       TMP_SessionStore.afterSwitchThemes = true;
+
+    TMP_extensionsCompatibility.preInit();
+
 }
