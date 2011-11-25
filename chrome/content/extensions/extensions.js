@@ -10,8 +10,10 @@
  */
 var TMP_extensionsCompatibility = {
   onContentLoaded: function TMP_EC_onContentLoaded() {
+    Tabmix.extensions = {sessionManager: false, treeStyleTab: false, tabGroupManager: false};
     try {
       if ("TabGroupsManagerApiVer1" in window) {
+        Tabmix.extensions.tabGroupManager = true;
         window.TMP_TabGroupsManager = {};
         window.TMP_TabGroupsManager.tabmixSessionsManager = function () {};
         let tmp = {};
@@ -38,7 +40,6 @@ var TMP_extensionsCompatibility = {
       });
     }
 
-    Tabmix.extensions = {sessionManager: false, treeStyleTab: false};
     if ("com" in window && com.morac &&
         com.morac.gSessionManagerSessionBrowser ||
         "gSessionManager" in window) {

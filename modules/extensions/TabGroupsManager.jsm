@@ -41,38 +41,6 @@ let TMP_TabGroupsManager = {
       '!tab.hidden && $&'
     ).toCode();
 
-    // fix bug in TGM when closeing last tab in a group with animation
-    if (aFirefox4) {
-      this.newCode("gBrowser.removeTab", aWindow.gBrowser.removeTab)._replace(
-        'if (aParams)',
-        'if (this.visibleTabs.length == 1) {aParams ? aParams.animate = false : aParams = {animate: false}};\
-         $&'
-      ).toCode();
-    }
-
-    this.newCode("TabGroupsManager.EventListener.prototype.onGroupSelect", aWindow.TabGroupsManager.EventListener.prototype.onGroupSelect)._replace(
-      '"tabBarScrollStatus" in window', 'true'
-    )._replace(
-      'tabBarScrollStatus();', 'TabmixTabbar.updateScrollStatus();'
-    )._replace(
-      'checkBeforeAndAfter();', 'TabmixTabbar.updateBeforeAndAfter();'
-    ).toCode();
-
-    this.newCode("TabGroupsManager.AllGroups.prototype.openNewGroup", aWindow.TabGroupsManager.AllGroups.prototype.openNewGroup)._replace(
-      'tab = gBrowser.addTab("about:blank");',
-      'if (arguments.length > 4 && arguments[4] == "TMP_BrowserOpenTab") { tab = TMP_BrowserOpenTab(null, true); } \
-       else $&'
-    ).toCode();
-
-    this.newCode("TabGroupsManager.GroupClass.prototype.removeTab", aWindow.TabGroupsManager.GroupClass.prototype.removeTab)._replace(
-      'gBrowser.addTab("about:blank")',
-      'TMP_BrowserOpenTab(null, true)'
-    )._replace(
-      'TabGroupsManager.allGroups.openNewGroup();',
-      'TabGroupsManager.allGroups.openNewGroup(null, null, null, null, "TMP_BrowserOpenTab");'
-    ).toCode();
-
-
     // **************************** for Session Manager ****************************
 
     this.newCode("TabmixSessionData.getTabProperties", aWindow.TabmixSessionData.getTabProperties)._replace(

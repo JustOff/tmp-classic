@@ -274,14 +274,22 @@ if ("__ctxextensions__removeTab" in gBrowser)
   _removeTab = "__ctxextensions__removeTab";
 
   if (Tabmix.isVersion(40)) {
+     // we add compatibility fix for tabGroupManager here
+     // so we don't have to work on the same function twice.
      Tabmix.newCode("gBrowser." + _removeTab, gBrowser[_removeTab])._replace(
         '{',
         '{ \
          if (aTab.hasAttribute("protected")) return;\
          if ("clearTimeouts" in aTab) aTab.clearTimeouts();'
      )._replace(
-        '{',
-        '{if (this.visibleTabs.length == 1 && TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab")) return;', {check: ("visibleTabs" in gBrowser)}
+       '{',
+       '{var lastTabInGroup = this.visibleTabs.length == 1;\
+        if (lastTabInGroup && TabmixSvc.prefs.getBoolPref("extensions.tabmix.keepLastTab")) return;'
+     )._replace(
+       // fix bug in TGM when closeing last tab in a group with animation
+       'if (aParams)',
+       'if (lastTabInGroup) {aParams ? aParams.animate = false : aParams = {animate: false}};\
+        $&', {check: Tabmix.extensions.tabGroupManager}
      )._replace(
        'aTab.removeAttribute("fadein");',
        'aTab.removeAttribute("minwidth"); \
@@ -291,20 +299,17 @@ if ("__ctxextensions__removeTab" in gBrowser)
      ).toCode();
 
     // we are prepare for bug #563337
-    let _bug563337 = false;
-    let _beginRemoveTab = gBrowser._beginRemoveTab.toString();
-    if (_beginRemoveTab.indexOf('this.addTab("about:blank", {skipAnimation: true});') > -1) {
-      _bug563337 = true;
-      Tabmix.newCode("gBrowser._beginRemoveTab", _beginRemoveTab)._replace(
+    if (Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager) {
+      Tabmix.newCode("gBrowser._beginRemoveTab", gBrowser._beginRemoveTab)._replace(
         'this.addTab("about:blank", {skipAnimation: true});',
-        'TMP_BrowserOpenTab(null, true);', {check: !("TabGroupsManagerApiVer1" in window)}
+        'TMP_BrowserOpenTab(null, true);'
       ).toCode();
     }
 
     // we check if browser.tabs.animate exist until bug Bug 380960 - Implement closing tabs animation will land
     Tabmix.newCode("gBrowser._endRemoveTab", gBrowser._endRemoveTab)._replace(
       'this.addTab("about:blank", {skipAnimation: true});',
-      'TMP_BrowserOpenTab(null, true);', {check: !_bug563337 && !("TabGroupsManagerApiVer1" in window)}
+      'TMP_BrowserOpenTab(null, true);', {check: !Tabmix.isVersion(60) && !Tabmix.extensions.tabGroupManager}
     )._replace( // Firefox 4.0+
       'this._blurTab(aTab);',
       'TMP_onRemoveTab(aTab); \
