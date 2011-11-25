@@ -38,14 +38,6 @@ if (this._inited)
   return;
 this._inited = true;
 
-if (Tabmix.isVersion(80) && ("_handleTabDrag" in gBrowser.tabContainer)) {
-  Tabmix.newCode("gBrowser.tabContainer._handleTabDrop", gBrowser.tabContainer._handleTabDrop)._replace(
-    'that.tabbrowser.swapBrowsersAndCloseOther(newTab, draggedTab);',
-    'TMP_copyTabData(newTab, draggedTab);\
-    $&'
-  ).toCode();
-}
-
 if(gBrowser.tabs.length > 0)
   gBrowser.mCurrentTab._selected = true;
 
