@@ -183,12 +183,11 @@ function TMP_TBP_Startup() {
 
     // look for installed extensions that are incompatible with tabmix
     if (firstWindow && TabmixSvc.prefs.getBoolPref("extensions.tabmix.disableIncompatible")) {
-      let checkCompatibility = function (aWindow) {
+      setTimeout(function checkCompatibility(aWindow) {
         let tmp = { };
         Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
         new tmp.CompatibilityCheck(aWindow, true);
-      }
-      window.setTimeout(checkCompatibility, Tabmix.isVersion(40) ? 0 : 3000, window);
+      }, Tabmix.isVersion(40) ? 0 : 3000, window);
     }
 
    // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
@@ -198,7 +197,7 @@ function TMP_TBP_Startup() {
     // especially with many extensions installed
     var pref = "nglayout.debug.disable_xul_cache";
     if ((!Tabmix.isVersion(40) && !firstWindow && !windowOpeneByTabmix) && TabmixSvc.prefs.prefHasUserValue(pref) && TabmixSvc.prefs.getBoolPref(pref)) {
-      window.setTimeout(window[TMP_BrowserStartup], 0);
+      window.setTimeout(function() {window[TMP_BrowserStartup]();}, 0);
     }
     else
       window[TMP_BrowserStartup]();

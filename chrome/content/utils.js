@@ -124,13 +124,13 @@ var Tabmix = {
         aDelay = 500;
 
       var self = this;
-      var logMethod = function () {
+      function logMethod() {
         let result = self.getObject(aMethod, rootID).toString();
         self.clog(aMethod + " = " + result);
       }
 
       if (aDelay >= 0)
-        setTimeout(logMethod, aDelay);
+        setTimeout(function () {logMethod();}, aDelay);
       else
         logMethod();
 
