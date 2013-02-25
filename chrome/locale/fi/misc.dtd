@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Lataa taustalla">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Muokkaa välilehden nimeä">
+<!ENTITY renametab.reset.label "Palauta oletusnimi">
+<!ENTITY title.label "Nimike">
+<!ENTITY default.label "Oletus">
+<!ENTITY renametab.permanently.label "Muuta tämän välilehden nimi sen osoitteesta huolimatta">
+<!ENTITY renametab.permanently.tooltip "Välilehti historian kera - uusi nimi säilyy kun osoite muuttuu">
+<!ENTITY forum.label "Foorumi">
+<!ENTITY faq.label "UKK">
+<!ENTITY help.label "Apua">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Valitse aika listalta tai määritä itse">
+<!ENTITY specifyreload.label "Määritä uudelleenlatauksen aikaväli">
+<!ENTITY sanitizer.entry "Tallenneteut Tab Mix Plus -istunnot">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Oletko varma että haluat poistaa KAIKKI tallennetut tiedot mukaanlukien varmuuskopiot?">

@@ -1,0 +1,105 @@
+/**
+    Firefox version 4.0
+
+    Mac platform
+
+**/
+
+@import url("chrome://tabmixplus/skin/app_version/4.0/general.css");
+@import url("chrome://tabmixplus/skin/app_version/4.0/mac/progress.css");
+
+/* :::: tabbar on bottom ::::
+  we leave the default background-image on mac
+#TabsToolbar[tabbaronbottom] {
+  background-image: none !important;
+}
+*/
+
+#TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > .tabbrowser-tab[selected="true"] {
+  position: static !important;
+}
+
+.tabbrowser-tabs[classic="v4Mac"] > .tabbrowser-tab .tabs-closebutton {
+  margin: 0px;
+}
+
+#TabsToolbar[multibar] {
+  background-repeat: repeat;
+}
+
+#TabsToolbar[multibar] .toolbarbutton-1 {
+  margin-top: 1px !important;
+}
+
+.tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  vertical-align: bottom;
+}
+
+/* tabmix color on tab - for inactive window */
+.tabbrowser-tabs[currentTab=true][useCurrentBGColor=true] .tab-background-start[selected="true"]:-moz-window-inactive,
+.tabbrowser-tabs[currentTab=true][useCurrentBGColor=true] .tab-background-middle[selected="true"]:-moz-window-inactive,
+.tabbrowser-tabs[currentTab=true][useCurrentBGColor=true] .tab-background-end[selected="true"]:-moz-window-inactive {
+  opacity: 0.5 !important;
+}
+.tabbrowser-tabs[unreadTab=true][useUnreadBGColor=true] .tab-background-start:not([selected="true"]):not([visited]):-moz-window-inactive,
+.tabbrowser-tabs[unreadTab=true][useUnreadBGColor=true] .tab-background-middle:not([selected="true"]):not([visited]):-moz-window-inactive,
+.tabbrowser-tabs[unreadTab=true][useUnreadBGColor=true] .tab-background-end:not([selected="true"]):not([visited]):-moz-window-inactive {
+  opacity: 0.5 !important;
+}
+.tabbrowser-tabs[otherTab=true][useOtherBGColor=true]:not([unreadTab=true]) .tab-background-start:not([selected="true"]):-moz-window-inactive,
+.tabbrowser-tabs[otherTab=true][useOtherBGColor=true]:not([unreadTab=true]) .tab-background-middle:not([selected="true"]):-moz-window-inactive,
+.tabbrowser-tabs[otherTab=true][useOtherBGColor=true]:not([unreadTab=true]) .tab-background-end:not([selected="true"]):-moz-window-inactive{
+  opacity: 0.5 !important;
+}
+.tabbrowser-tabs[otherTab=true][useOtherBGColor=true] .tab-background-start:not([selected="true"])[visited]:-moz-window-inactive,
+.tabbrowser-tabs[otherTab=true][useOtherBGColor=true] .tab-background-middle:not([selected="true"])[visited]:-moz-window-inactive,
+.tabbrowser-tabs[otherTab=true][useOtherBGColor=true] .tab-background-end:not([selected="true"])[visited]:-moz-window-inactive {
+  opacity: 0.5 !important;
+}
+
+/* for mac - look in pinstripe/browser/browser.css */
+.tabbrowser-tabs > .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
+.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
+.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
+.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
+.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]),
+.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-text-stack > .tab-label:not([selected="true"]):-moz-lwtheme {
+  opacity: .8;
+}
+
+/* :::: scrollbutton arrow - fix borders :::: */
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
+  height: 24px;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up,
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up {
+  -moz-border-end: none;
+}
+
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
+  -moz-border-start: none;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]){
+  -moz-border-image: none;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(ltr) {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
+}
+
+#TabsToolbar[tabsontop="true"][multibar]:not(:-moz-lwtheme) {
+  background-color: rgb(190, 190, 190);
+}
+
+#TabsToolbar[tabsontop="true"][multibar]:not(:-moz-lwtheme):-moz-window-inactive {
+  background-color: rgb(228, 228, 228);
+}
