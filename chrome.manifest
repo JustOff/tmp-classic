@@ -1,7 +1,6 @@
 content   tabmixplus                 chrome/content/
 resource  tabmixplus                 modules/
 
-locale    tabmixplus   ar            chrome/locale/ar/
 locale    tabmixplus   bg            chrome/locale/bg-BG/
 locale    tabmixplus   ca            chrome/locale/ca/
 locale    tabmixplus   cs            chrome/locale/cs-CZ/
@@ -11,9 +10,7 @@ locale    tabmixplus   el            chrome/locale/el/
 locale    tabmixplus   en-US         chrome/locale/en-US/
 locale    tabmixplus   es-ES         chrome/locale/es-ES/
 locale    tabmixplus   et            chrome/locale/et-EE/
-locale    tabmixplus   eu            chrome/locale/eu/
 locale    tabmixplus   fa            chrome/locale/fa-IR/
-locale    tabmixplus   fi            chrome/locale/fi/
 locale    tabmixplus   fr            chrome/locale/fr/
 locale    tabmixplus   he            chrome/locale/he-IL/
 locale    tabmixplus   hr            chrome/locale/hr-HR/
@@ -21,7 +18,6 @@ locale    tabmixplus   hu            chrome/locale/hu-HU/
 locale    tabmixplus   it            chrome/locale/it/
 locale    tabmixplus   ja            chrome/locale/ja/
 locale    tabmixplus   ko            chrome/locale/ko-KR/
-locale    tabmixplus   lv            chrome/locale/lv-LV/
 locale    tabmixplus   nl            chrome/locale/nl/
 locale    tabmixplus   pl            chrome/locale/pl/
 locale    tabmixplus   pt-BR         chrome/locale/pt-BR/
@@ -85,5 +81,3 @@ skin      tabmix-os    classic/1.0   chrome/skin/app_version/4.0/linux/ os=Linux
 
 style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
 style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferencesOverlay.css
-
-manifest  test.manifest
