@@ -579,7 +579,7 @@ Tabmix.tablib = {
   change_utility: function change_utility() {
     // FullScreen code related to tabs bellow content initialize by first
     // fullScreen event, see TMP_eventListener.onFullScreen
-    if (Tabmix.isVersion(400)) {
+    if (Tabmix.isVersion(400) || TabmixSvc.isPaleMoon && Tabmix.isVersion(280, 280)) {
       Tabmix.originalFunctions.FullScreen_showNavToolbox = FullScreen.showNavToolbox;
       FullScreen.showNavToolbox = function() {
         let result = Tabmix.originalFunctions.FullScreen_showNavToolbox.apply(this, arguments);

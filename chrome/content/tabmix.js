@@ -662,6 +662,14 @@ var TMP_eventListener = {
             '$&' + $LF +
             'TMP_eventListener.toggleTabbarVisibility(false, aAnimate);'
           ).toCode();
+        } else if (TabmixSvc.isPaleMoon && Tabmix.isVersion(280, 280)) {
+          let $LF = '\n    ';
+          Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
+            'this._isChromeCollapsed = true;',
+            'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
+            '$&' + $LF +
+            'TMP_eventListener.toggleTabbarVisibility(false);'
+          ).toCode();
         } else {
           Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
             'gNavToolbox.style.marginTop = "";',
@@ -674,7 +682,7 @@ var TMP_eventListener = {
           ).toCode();
         }
       }
-      let fullScreen = Tabmix.isVersion(470) ?
+      let fullScreen = (Tabmix.isVersion(470) || TabmixSvc.isPaleMoon && Tabmix.isVersion(280, 280)) ?
         document.fullscreenElement : document.mozFullScreen;
       if (!fullScreen) {
         fullScrToggler.hidden = false;
@@ -707,7 +715,7 @@ var TMP_eventListener = {
    * visible. we call this function from tabBarHeightModified and showNavToolbox
    */
   updateMouseTargetRect() {
-    if (!Tabmix.isVersion(400)) {
+    if (!Tabmix.isVersion(400) || !TabmixSvc.isPaleMoon && Tabmix.isVersion(280, 280)) {
       return;
     }
     if (!window.fullScreen || FullScreen._isChromeCollapsed) {
@@ -732,7 +740,7 @@ var TMP_eventListener = {
 
   _expandCallback: function TMP_EL__expandCallback() {
     if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1) {
-      if (Tabmix.isVersion(400))
+      if (Tabmix.isVersion(400) || TabmixSvc.isPaleMoon && Tabmix.isVersion(280, 280))
         FullScreen.showNavToolbox();
       else
         FullScreen.mouseoverToggle(true);
@@ -770,7 +778,7 @@ var TMP_eventListener = {
 
       // Until Firefox 41 changing the margin trigger resize event that calls
       // updateTabbarBottomPosition
-      if (Tabmix.isVersion(410))
+      if (Tabmix.isVersion(410) || TabmixSvc.isPaleMoon && Tabmix.isVersion(280, 280))
         gTMPprefObserver.updateTabbarBottomPosition();
     }
   },
